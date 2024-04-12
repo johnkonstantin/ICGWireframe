@@ -60,9 +60,9 @@ public class Matrix {
         Matrix res = new Matrix(a.h, b.w);
 
         for (int i = 0; i < res.h; ++i) {
-            for (int j = 0; j < res.w; ++j) {
-                for (int k = 0; k < a.w; ++k) {
-                    res.matrix[i][j] += a.matrix[i][k] * b.matrix[k][j]; //TODO Optimize
+            for (int k = 0; k < a.w; ++k) {
+                for (int j = 0; j < res.w; ++j) {
+                    res.matrix[i][j] += a.matrix[i][k] * b.matrix[k][j];
                 }
             }
         }
