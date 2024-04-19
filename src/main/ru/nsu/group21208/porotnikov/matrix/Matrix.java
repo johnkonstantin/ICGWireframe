@@ -132,6 +132,30 @@ public class Matrix {
         return res;
     }
 
+    public int[][] getIntArray() {
+        int[][] res = new int[this.h][this.w];
+
+        for (int i = 0; i < this.h; ++i) {
+            for (int j = 0; j < this.w; ++j) {
+                res[i][j] = this.matrix[i][j] / this.divider;
+            }
+        }
+
+        return res;
+    }
+
+    public double[][] getDoubleArray() {
+        double[][] res = new double[this.h][this.w];
+
+        for (int i = 0; i < this.h; ++i) {
+            for (int j = 0; j < this.w; ++j) {
+                res[i][j] = (double)this.matrix[i][j] / this.divider;
+            }
+        }
+
+        return res;
+    }
+
     public void print() {
         for (int i = 0; i < this.h; ++i) {
             for (int j = 0; j < this.w; ++j) {
