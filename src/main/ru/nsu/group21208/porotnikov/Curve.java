@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Curve {
     private final Point[] basePoints;
     private final int N;
-    private final Matrix Ms = new Matrix(new int[][] {
+    private final Matrix Ms = new Matrix(new int[][]{
             {-1, 3, -3, 1},
             {3, -6, 3, 0},
             {-3, 0, 3, 0},
@@ -32,41 +32,46 @@ public class Curve {
     }
 
     public Point[][] getCurvePoints() {
-        Point[][] res = new Point[this.basePoints.length - 3][N + 1];
+        Point[][] res = new Point[this.basePoints.length - 3][this.N + 1];
+        for (int i = 0; i < res.length; ++i) {
+            for (int j = 0; j < res[i].length; ++j) {
+                res[i][j] = new Point();
+            }
+        }
 
         for (int i = 1; i < this.basePoints.length - 2; ++i) {
-            Matrix Gx = new Matrix(new int[] {
+            Matrix Gx = new Matrix(new int[]{
                     this.basePoints[i - 1].x,
                     this.basePoints[i].x,
-                    this.basePoints[i+1].x,
-                    this.basePoints[i+2].x
+                    this.basePoints[i + 1].x,
+                    this.basePoints[i + 2].x
             }, Matrix.Orientation.Vertical);
             for (int t = 0; t < N + 1; ++t) {
-                Matrix T = new Matrix(new int[] {
+                Matrix T = new Matrix(new int[]{
                         t * t * t,
-                        t * t,
-                        t,
-                        1
+                        t * t * N,
+                        t * N * N,
+                        N * N * N
                 }, Matrix.Orientation.Horizontal);
-                T.setDivider(N);
+                T.setDivider(N * N * N);
                 Matrix resMatrix = Matrix.mul(Matrix.mul(T, this.Ms), Gx);
                 res[i - 1][t].x = resMatrix.getIntArray()[0][0];
             }
 
-            Matrix Gy = new Matrix(new int[] {
+            Matrix Gy = new Matrix(new int[]{
                     this.basePoints[i - 1].y,
                     this.basePoints[i].y,
-                    this.basePoints[i+1].y,
-                    this.basePoints[i+2].y
+                    this.basePoints[i + 1].y,
+                    this.basePoints[i + 2].y
             }, Matrix.Orientation.Vertical);
             for (int t = 0; t < N + 1; ++t) {
-                Matrix T = new Matrix(new int[] {
+                Matrix T = new Matrix(new int[]{
                         t * t * t,
-                        t * t,
-                        t,
-                        1
+                        t * t * N,
+                        t * N * N,
+                        N * N * N
                 }, Matrix.Orientation.Horizontal);
-                T.setDivider(N);
+                T.setDivider(N * N * N);
                 Matrix resMatrix = Matrix.mul(Matrix.mul(T, this.Ms), Gy);
                 res[i - 1][t].y = resMatrix.getIntArray()[0][0];
             }
@@ -76,7 +81,11 @@ public class Curve {
     }
 
     public Point[] getBasePoints() {
-        return this.basePoints;
+        return this.basePoints.clone();
+    }
+
+    public int getN() {
+        return this.N;
     }
 
 }
