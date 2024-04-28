@@ -1,12 +1,16 @@
 package main.ru.nsu.group21208.porotnikov.matrix;
 
-import java.util.Arrays;
 
 public class Matrix {
-    private final int[][] matrix;
+    private int[][] matrix;
     private int divider;
-    private final int h;
-    private final int w;
+    private int h;
+    private int w;
+
+    public enum Orientation {
+        Horizontal,
+        Vertical
+    }
 
     public Matrix(int h, int w) {
         if (h <= 0 || w <= 0) {
@@ -25,6 +29,30 @@ public class Matrix {
         this.matrix = arr.clone();
         this.h = arr.length;
         this.w = arr[0].length;
+        this.divider = 1;
+    }
+
+    public Matrix(int[] arr, Orientation orientation) {
+        if (arr == null || orientation == null) {
+            throw new RuntimeException("Initial array for matrix and orientation must be not null!");
+        }
+        this.divider = 1;
+        switch (orientation) {
+            case Horizontal -> {
+                this.h = 1;
+                this.w = arr.length;
+                this.matrix = new int[this.h][this.w];
+                System.arraycopy(arr, 0, this.matrix[0], 0, w);
+            }
+            case Vertical -> {
+                this.h = arr.length;
+                this.w = 1;
+                this.matrix = new int[this.h][this.w];
+                for (int i = 0; i < this.h; ++i) {
+                    this.matrix[i][0] = arr[i];
+                }
+            }
+        }
     }
 
     public void setDivider(int newDivider) {
