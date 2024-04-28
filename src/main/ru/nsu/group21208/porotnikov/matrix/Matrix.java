@@ -2,7 +2,7 @@ package main.ru.nsu.group21208.porotnikov.matrix;
 
 
 public class Matrix {
-    private int[][] matrix;
+    private long[][] matrix;
     private int divider;
     private int h;
     private int w;
@@ -16,13 +16,13 @@ public class Matrix {
         if (h <= 0 || w <= 0) {
             throw new RuntimeException("Wrong matrix size, all dimensions must be greater then 0!");
         }
-        this.matrix = new int[h][w];
+        this.matrix = new long[h][w];
         this.divider = 1;
         this.h = h;
         this.w = w;
     }
 
-    public Matrix(int[][] arr) {
+    public Matrix(long[][] arr) {
         if (arr == null || arr.length == 0 || arr[0].length == 0) {
             throw new RuntimeException("Initial array for matrix must be not null and all dimensions must be greater then 0!");
         }
@@ -30,6 +30,44 @@ public class Matrix {
         this.h = arr.length;
         this.w = arr[0].length;
         this.divider = 1;
+    }
+
+    public Matrix(int[][] arr) {
+        if (arr == null || arr.length == 0 || arr[0].length == 0) {
+            throw new RuntimeException("Initial array for matrix must be not null and all dimensions must be greater then 0!");
+        }
+        this.h = arr.length;
+        this.w = arr[0].length;
+        this.divider = 1;
+        this.matrix = new long[h][w];
+        for (int i = 0; i < arr.length; ++i) {
+            for (int j = 0; j < arr[i].length; ++j) {
+                this.matrix[i][j] = arr[i][j];
+            }
+        }
+    }
+
+    public Matrix(long[] arr, Orientation orientation) {
+        if (arr == null || orientation == null) {
+            throw new RuntimeException("Initial array for matrix and orientation must be not null!");
+        }
+        this.divider = 1;
+        switch (orientation) {
+            case Horizontal -> {
+                this.h = 1;
+                this.w = arr.length;
+                this.matrix = new long[this.h][this.w];
+                System.arraycopy(arr, 0, this.matrix[0], 0, w);
+            }
+            case Vertical -> {
+                this.h = arr.length;
+                this.w = 1;
+                this.matrix = new long[this.h][this.w];
+                for (int i = 0; i < this.h; ++i) {
+                    this.matrix[i][0] = arr[i];
+                }
+            }
+        }
     }
 
     public Matrix(int[] arr, Orientation orientation) {
@@ -41,13 +79,15 @@ public class Matrix {
             case Horizontal -> {
                 this.h = 1;
                 this.w = arr.length;
-                this.matrix = new int[this.h][this.w];
-                System.arraycopy(arr, 0, this.matrix[0], 0, w);
+                this.matrix = new long[this.h][this.w];
+                for (int i = 0; i < arr.length; ++i) {
+                    this.matrix[0][i] = arr[i];
+                }
             }
             case Vertical -> {
                 this.h = arr.length;
                 this.w = 1;
-                this.matrix = new int[this.h][this.w];
+                this.matrix = new long[this.h][this.w];
                 for (int i = 0; i < this.h; ++i) {
                     this.matrix[i][0] = arr[i];
                 }
@@ -162,6 +202,18 @@ public class Matrix {
 
     public int[][] getIntArray() {
         int[][] res = new int[this.h][this.w];
+
+        for (int i = 0; i < this.h; ++i) {
+            for (int j = 0; j < this.w; ++j) {
+                res[i][j] = (int) (this.matrix[i][j] / this.divider);
+            }
+        }
+
+        return res;
+    }
+
+    public long[][] getLongArray() {
+        long[][] res = new long[this.h][this.w];
 
         for (int i = 0; i < this.h; ++i) {
             for (int j = 0; j < this.w; ++j) {
