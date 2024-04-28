@@ -17,6 +17,7 @@ public class CurveView extends JPanel {
     private int isDragged = 0;
     private int centerX;
     private int centerY;
+    private CurveParametersEditor parametersEditor = null;
 
     private final int pointRadius = 15;
 
@@ -76,7 +77,7 @@ public class CurveView extends JPanel {
                 new Point(80 * 3, 0),
                 new Point(100 * 3, 100 * 2),
                 new Point(150 * 3, 0)
-        }, 20);
+        }, 10);
         centerX = 0;
         centerY = 0;
 
@@ -94,11 +95,27 @@ public class CurveView extends JPanel {
                         if (target <= parent.selectedPoint) {
                             parent.selectedPoint = -1;
                         }
+                        if (parent.parametersEditor != null) {
+                            parent.parametersEditor.setBasePointsNum(newBasePoints.length);
+                        }
                     }
                 }
-                else if (e.getButton() == MouseEvent.BUTTON1) {
+                else if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 1) {
                     if (target != -1) {
                         parent.selectedPoint = target;
+                    }
+                }
+                else if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) {
+                    if (target == -1) {
+                        Point[] basePoints = parent.curve.getBasePoints();
+                        Point[] newBasePoints = new Point[basePoints.length + 1];
+                        System.arraycopy(basePoints, 0, newBasePoints, 0, basePoints.length);
+                        newBasePoints[basePoints.length] = new Point(e.getX() - parent.getWidth() / 2,
+                                parent.getHeight() / 2 - e.getY());
+                        parent.curve = new Curve(newBasePoints, parent.curve.getN());
+                        if (parent.parametersEditor != null) {
+                            parent.parametersEditor.setBasePointsNum(newBasePoints.length);
+                        }
                     }
                 }
                 repaint();
@@ -156,6 +173,66 @@ public class CurveView extends JPanel {
 
             }
         });
+    }
 
+    public int getCurveN() {
+        return this.curve.getN();
+    }
+
+    public int getCurveBasePointsNum() {
+        return this.curve.getBasePoints().length;
+    }
+
+    public boolean setCurveN(int N) {
+        if (N < 1) {
+            return false;
+        }
+        this.curve = new Curve(this.curve.getBasePoints(), N);
+        repaint();
+        return true;
+    }
+
+    public boolean setCurveBasePointsNum(int K) {
+        if (K < 4) {
+            return false;
+        }
+        Point[] basePoints = this.curve.getBasePoints();
+        if (K <= basePoints.length) {
+            this.curve = new Curve(Arrays.copyOf(this.curve.getBasePoints(), K), this.curve.getN());
+        }
+        else {
+            int[] dP = new int[basePoints.length - 1];
+            int t = K - basePoints.length;
+            int ii = 0;
+            while (t > 0) {
+                dP[ii] += 1;
+                --t;
+                ++ii;
+                if (ii == dP.length) {
+                    ii = 0;
+                }
+            }
+            ArrayList<Point> newBasePointsList = new ArrayList<>(Arrays.asList(basePoints.clone()));
+            int offset = 0;
+            for (int i = 0; i < dP.length; ++i) {
+                int dx = basePoints[i + 1].x - basePoints[i].x;
+                int dy = basePoints[i + 1].y - basePoints[i].y;
+                for (int j = 0; j < dP[i]; ++j) {
+                    newBasePointsList.add(i + offset + 1, new Point(basePoints[i].x + dx * (j + 1) / (dP[i] + 1),
+                            basePoints[i].y + dy * (j + 1) / (dP[i] + 1)));
+                    ++offset;
+                }
+            }
+            Point[] newBasePoints = newBasePointsList.toArray(new Point[0]);
+            this.curve = new Curve(newBasePoints, this.curve.getN());
+        }
+        repaint();
+        return true;
+    }
+
+    public void setParametersEditor(CurveParametersEditor parametersEditor) {
+        if (parametersEditor != null) {
+            this.parametersEditor = parametersEditor;
+        }
     }
 }
