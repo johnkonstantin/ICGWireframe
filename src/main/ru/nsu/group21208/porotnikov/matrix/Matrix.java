@@ -153,7 +153,7 @@ public class Matrix {
     }
 
 
-    public static Matrix mulToNumber(Matrix a, int b) {
+    public static Matrix mulToNumber(Matrix a, double b) {
         if (a == null) {
             return null;
         }
