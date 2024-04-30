@@ -108,13 +108,15 @@ public class CurveView extends JPanel {
                 else if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) {
                     if (target == -1) {
                         Point[] basePoints = parent.curve.getBasePoints();
-                        Point[] newBasePoints = new Point[basePoints.length + 1];
-                        System.arraycopy(basePoints, 0, newBasePoints, 0, basePoints.length);
-                        newBasePoints[basePoints.length] = new Point(e.getX() - parent.getWidth() / 2,
-                                parent.getHeight() / 2 - e.getY());
-                        parent.curve = new Curve(newBasePoints, parent.curve.getN());
-                        if (parent.parametersEditor != null) {
-                            parent.parametersEditor.setBasePointsNum(newBasePoints.length);
+                        if (basePoints.length < 50) {
+                            Point[] newBasePoints = new Point[basePoints.length + 1];
+                            System.arraycopy(basePoints, 0, newBasePoints, 0, basePoints.length);
+                            newBasePoints[basePoints.length] = new Point(e.getX() - parent.getWidth() / 2,
+                                    parent.getHeight() / 2 - e.getY());
+                            parent.curve = new Curve(newBasePoints, parent.curve.getN());
+                            if (parent.parametersEditor != null) {
+                                parent.parametersEditor.setBasePointsNum(newBasePoints.length);
+                            }
                         }
                     }
                 }
@@ -208,9 +210,7 @@ public class CurveView extends JPanel {
                 dP[ii] += 1;
                 --t;
                 ++ii;
-                if (ii == dP.length) {
-                    ii = 0;
-                }
+                ii %= dP.length;
             }
             ArrayList<Point> newBasePointsList = new ArrayList<>(Arrays.asList(basePoints.clone()));
             int offset = 0;
