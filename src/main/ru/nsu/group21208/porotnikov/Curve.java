@@ -9,11 +9,11 @@ import java.util.Objects;
 public class Curve {
     private final Point[] basePoints;
     private final int N;
-    private final Matrix Ms = new Matrix(new int[][]{
-            {-1, 3, -3, 1},
-            {3, -6, 3, 0},
-            {-3, 0, 3, 0},
-            {1, 4, 1, 0}
+    private final Matrix Ms = new Matrix(new double[][]{
+            {-1.0 / 6, 0.5, -0.5, 1.0 / 6},
+            {0.5, -1.0, 0.5, 0},
+            {-0.5, 0, 0.5, 0},
+            {1.0 / 6, 2.0 / 3, 1.0 / 6, 0}
     });
 
     public Curve(Point[] basePoints, int N) {
@@ -28,7 +28,6 @@ public class Curve {
         }
         this.basePoints = basePoints;
         this.N = N;
-        Ms.setDivider(6);
     }
 
     public Point[][] getCurvePoints() {
@@ -53,8 +52,7 @@ public class Curve {
                         t * N * N,
                         N * N * N
                 }, Matrix.Orientation.Horizontal);
-                T.setDivider(N * N * N);
-                Matrix resMatrix = Matrix.mul(Matrix.mul(T, this.Ms), Gx);
+                Matrix resMatrix = Matrix.mulToNumber(Matrix.mul(Matrix.mul(T, this.Ms), Gx), 1.0 / (N * N * N));
                 res[i - 1][t].x = resMatrix.getIntArray()[0][0];
             }
 
@@ -71,8 +69,7 @@ public class Curve {
                         t * N * N,
                         N * N * N
                 }, Matrix.Orientation.Horizontal);
-                T.setDivider(N * N * N);
-                Matrix resMatrix = Matrix.mul(Matrix.mul(T, this.Ms), Gy);
+                Matrix resMatrix = Matrix.mulToNumber(Matrix.mul(Matrix.mul(T, this.Ms), Gy), 1.0 / (N * N * N));
                 res[i - 1][t].y = resMatrix.getIntArray()[0][0];
             }
         }
