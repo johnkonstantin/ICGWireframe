@@ -57,6 +57,28 @@ public class Matrix {
         }
     }
 
+    public Matrix(double[] arr, Orientation orientation) {
+        if (arr == null || orientation == null) {
+            throw new RuntimeException("Initial array for matrix and orientation must be not null!");
+        }
+        switch (orientation) {
+            case Horizontal -> {
+                this.h = 1;
+                this.w = arr.length;
+                this.matrix = new double[this.h][this.w];
+                System.arraycopy(arr, 0, this.matrix[0], 0, this.w);
+            }
+            case Vertical -> {
+                this.h = arr.length;
+                this.w = 1;
+                this.matrix = new double[this.h][this.w];
+                for (int i = 0; i < this.h; ++i) {
+                    this.matrix[i][0] = arr[i];
+                }
+            }
+        }
+    }
+
     public Matrix(long[] arr, Orientation orientation) {
         if (arr == null || orientation == null) {
             throw new RuntimeException("Initial array for matrix and orientation must be not null!");
