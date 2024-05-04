@@ -8,14 +8,6 @@ public class Vector3D extends Matrix {
         super(3, 1);
     }
 
-    public Vector3D(int x, int y, int z) {
-        super(new int[]{x, y, z}, Orientation.Vertical);
-    }
-
-    public Vector3D(long x, long y, long z) {
-        super(new long[]{x, y, z}, Orientation.Vertical);
-    }
-
     public Vector3D(double x, double y, double z) {
         super(new double[]{x, y, z}, Orientation.Vertical);
     }

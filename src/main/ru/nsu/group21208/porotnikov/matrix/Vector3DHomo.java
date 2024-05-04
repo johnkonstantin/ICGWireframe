@@ -3,24 +3,8 @@ package main.ru.nsu.group21208.porotnikov.matrix;
 import org.jetbrains.annotations.NotNull;
 
 public class Vector3DHomo extends Matrix {
-    public Vector3DHomo(int x, int y, int z) {
-        super(new int[]{x, y, z, 1}, Orientation.Vertical);
-    }
-
-    public Vector3DHomo(long x, long y, long z) {
-        super(new long[]{x, y, z, 1}, Orientation.Vertical);
-    }
-
     public Vector3DHomo(double x, double y, double z) {
         super(new double[]{x, y, z, 1}, Orientation.Vertical);
-    }
-
-    public Vector3DHomo(int x, int y, int z, int w) {
-        super(new int[]{x, y, z, w}, Orientation.Vertical);
-    }
-
-    public Vector3DHomo(long x, long y, long z, long w) {
-        super(new long[]{x, y, z, w}, Orientation.Vertical);
     }
 
     public Vector3DHomo(double x, double y, double z, double w) {
