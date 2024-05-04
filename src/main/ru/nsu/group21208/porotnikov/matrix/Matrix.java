@@ -1,10 +1,12 @@
 package main.ru.nsu.group21208.porotnikov.matrix;
 
 
+import org.jetbrains.annotations.NotNull;
+
 public class Matrix {
-    private double[][] matrix;
-    private int h;
-    private int w;
+    protected double[][] matrix;
+    protected int        h;
+    protected int        w;
 
     public enum Orientation {
         Horizontal,
@@ -13,28 +15,44 @@ public class Matrix {
 
     public Matrix(int h, int w) {
         if (h <= 0 || w <= 0) {
-            throw new RuntimeException("Wrong matrix size, all dimensions must be greater then 0!");
+            throw new IllegalArgumentException("Wrong matrix size, all dimensions must be greater then 0!");
         }
         this.matrix = new double[h][w];
-        this.h = h;
-        this.w = w;
+        this.h      = h;
+        this.w      = w;
     }
 
     public Matrix(double[][] arr) {
-        if (arr == null || arr.length == 0 || arr[0].length == 0) {
-            throw new RuntimeException("Initial array for matrix must be not null and all dimensions must be greater then 0!");
+        if (arr == null) {
+            throw new IllegalArgumentException("Initial array for matrix must be not null!");
         }
-        this.h = arr.length;
-        this.w = arr[0].length;
+        for (double[] line : arr) {
+            if (line == null) {
+                throw new IllegalArgumentException("Initial array for matrix must be not null!");
+            }
+        }
+        if (arr.length == 0 || arr[0].length == 0) {
+            throw new IllegalArgumentException("All dimensions must be greater then 0!");
+        }
+        this.h      = arr.length;
+        this.w      = arr[0].length;
         this.matrix = arr.clone();
     }
 
     public Matrix(long[][] arr) {
-        if (arr == null || arr.length == 0 || arr[0].length == 0) {
-            throw new RuntimeException("Initial array for matrix must be not null and all dimensions must be greater then 0!");
+        if (arr == null) {
+            throw new IllegalArgumentException("Initial array for matrix must be not null!");
         }
-        this.h = arr.length;
-        this.w = arr[0].length;
+        for (long[] line : arr) {
+            if (line == null) {
+                throw new IllegalArgumentException("Initial array for matrix must be not null!");
+            }
+        }
+        if (arr.length == 0 || arr[0].length == 0) {
+            throw new IllegalArgumentException("All dimensions must be greater then 0!");
+        }
+        this.h      = arr.length;
+        this.w      = arr[0].length;
         this.matrix = new double[h][w];
         for (int i = 0; i < this.h; ++i) {
             for (int j = 0; j < w; ++j) {
@@ -44,11 +62,19 @@ public class Matrix {
     }
 
     public Matrix(int[][] arr) {
-        if (arr == null || arr.length == 0 || arr[0].length == 0) {
-            throw new RuntimeException("Initial array for matrix must be not null and all dimensions must be greater then 0!");
+        if (arr == null) {
+            throw new IllegalArgumentException("Initial array for matrix must be not null!");
         }
-        this.h = arr.length;
-        this.w = arr[0].length;
+        for (int[] line : arr) {
+            if (line == null) {
+                throw new IllegalArgumentException("Initial array for matrix must be not null!");
+            }
+        }
+        if (arr.length == 0 || arr[0].length == 0) {
+            throw new IllegalArgumentException("All dimensions must be greater then 0!");
+        }
+        this.h      = arr.length;
+        this.w      = arr[0].length;
         this.matrix = new double[h][w];
         for (int i = 0; i < arr.length; ++i) {
             for (int j = 0; j < arr[i].length; ++j) {
@@ -57,20 +83,17 @@ public class Matrix {
         }
     }
 
-    public Matrix(double[] arr, Orientation orientation) {
-        if (arr == null || orientation == null) {
-            throw new RuntimeException("Initial array for matrix and orientation must be not null!");
-        }
+    public Matrix(double @NotNull [] arr, @NotNull Orientation orientation) {
         switch (orientation) {
             case Horizontal -> {
-                this.h = 1;
-                this.w = arr.length;
+                this.h      = 1;
+                this.w      = arr.length;
                 this.matrix = new double[this.h][this.w];
                 System.arraycopy(arr, 0, this.matrix[0], 0, this.w);
             }
             case Vertical -> {
-                this.h = arr.length;
-                this.w = 1;
+                this.h      = arr.length;
+                this.w      = 1;
                 this.matrix = new double[this.h][this.w];
                 for (int i = 0; i < this.h; ++i) {
                     this.matrix[i][0] = arr[i];
@@ -79,22 +102,19 @@ public class Matrix {
         }
     }
 
-    public Matrix(long[] arr, Orientation orientation) {
-        if (arr == null || orientation == null) {
-            throw new RuntimeException("Initial array for matrix and orientation must be not null!");
-        }
+    public Matrix(long @NotNull [] arr, @NotNull Orientation orientation) {
         switch (orientation) {
             case Horizontal -> {
-                this.h = 1;
-                this.w = arr.length;
+                this.h      = 1;
+                this.w      = arr.length;
                 this.matrix = new double[this.h][this.w];
                 for (int i = 0; i < this.w; ++i) {
                     this.matrix[0][i] = arr[i];
                 }
             }
             case Vertical -> {
-                this.h = arr.length;
-                this.w = 1;
+                this.h      = arr.length;
+                this.w      = 1;
                 this.matrix = new double[this.h][this.w];
                 for (int i = 0; i < this.h; ++i) {
                     this.matrix[i][0] = arr[i];
@@ -103,22 +123,19 @@ public class Matrix {
         }
     }
 
-    public Matrix(int[] arr, Orientation orientation) {
-        if (arr == null || orientation == null) {
-            throw new RuntimeException("Initial array for matrix and orientation must be not null!");
-        }
+    public Matrix(int @NotNull [] arr, @NotNull Orientation orientation) {
         switch (orientation) {
             case Horizontal -> {
-                this.h = 1;
-                this.w = arr.length;
+                this.h      = 1;
+                this.w      = arr.length;
                 this.matrix = new double[this.h][this.w];
                 for (int i = 0; i < arr.length; ++i) {
                     this.matrix[0][i] = arr[i];
                 }
             }
             case Vertical -> {
-                this.h = arr.length;
-                this.w = 1;
+                this.h      = arr.length;
+                this.w      = 1;
                 this.matrix = new double[this.h][this.w];
                 for (int i = 0; i < this.h; ++i) {
                     this.matrix[i][0] = arr[i];
@@ -127,9 +144,9 @@ public class Matrix {
         }
     }
 
-    public static Matrix sum(Matrix a, Matrix b) {
-        if (a == null || b == null || a.h != b.h || a.w != b.w) {
-            return null;
+    public static @NotNull Matrix sum(@NotNull Matrix a, @NotNull Matrix b) {
+        if (a.h != b.h || a.w != b.w) {
+            throw new IllegalArgumentException("Matrix dimensions must be equal!");
         }
         Matrix res = new Matrix(a.h, a.w);
 
@@ -142,9 +159,9 @@ public class Matrix {
         return res;
     }
 
-    public static Matrix sub(Matrix a, Matrix b) {
-        if (a == null || b == null || a.h != b.h || a.w != b.w) {
-            return null;
+    public static @NotNull Matrix sub(@NotNull Matrix a, @NotNull Matrix b) {
+        if (a.h != b.h || a.w != b.w) {
+            throw new IllegalArgumentException("Matrix dimensions must be equal!");
         }
         Matrix res = new Matrix(a.h, a.w);
 
@@ -157,9 +174,9 @@ public class Matrix {
         return res;
     }
 
-    public static Matrix mul(Matrix a, Matrix b) {
-        if (a == null || b == null || a.w != b.h) {
-            return null;
+    public static @NotNull Matrix mul(@NotNull Matrix a, @NotNull Matrix b) {
+        if (a.w != b.h) {
+            throw new IllegalArgumentException("Matrix dimensions must be consistent!");
         }
         Matrix res = new Matrix(a.h, b.w);
 
@@ -175,10 +192,7 @@ public class Matrix {
     }
 
 
-    public static Matrix mulToNumber(Matrix a, double b) {
-        if (a == null) {
-            return null;
-        }
+    public static @NotNull Matrix mulToNumber(@NotNull Matrix a, double b) {
         Matrix res = new Matrix(a.h, a.w);
 
         for (int i = 0; i < res.h; ++i) {
@@ -207,7 +221,7 @@ public class Matrix {
 
         for (int i = 0; i < this.h; ++i) {
             for (int j = 0; j < this.w; ++j) {
-                res[i][j] = (long)this.matrix[i][j];
+                res[i][j] = (long) this.matrix[i][j];
             }
         }
 
@@ -222,6 +236,14 @@ public class Matrix {
         }
 
         return res;
+    }
+
+    public int getHeight() {
+        return this.h;
+    }
+
+    public int getWidth() {
+        return this.w;
     }
 
     public void print() {
