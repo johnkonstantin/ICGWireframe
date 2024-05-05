@@ -3,8 +3,8 @@ package main.ru.nsu.group21208.porotnikov.matrix;
 public class QuaternionMatrix extends TransformationMatrix {
     public QuaternionMatrix(Vector3D axis, double angle) {
         super();
-        double cos = Math.cos(angle / 2);
-        double sin = Math.sin(angle / 2);
+        double cos = Math.cos(angle * Math.PI / 360);
+        double sin = Math.sin(angle * Math.PI / 360);
         double[] q = new double[]{
                 cos,
                 sin * axis.getX(),
