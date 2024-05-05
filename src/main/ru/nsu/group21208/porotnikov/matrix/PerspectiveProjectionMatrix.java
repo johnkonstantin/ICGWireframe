@@ -5,8 +5,8 @@ public class PerspectiveProjectionMatrix extends TransformationMatrix {
         super(new double[][]{
                 {nearClip / (Math.tan(fov * Math.PI / 360) * nearClip * ar), 0, 0, 0},
                 {0, nearClip / (Math.tan(fov * Math.PI / 360) * nearClip), 0, 0},
-                {0, 0, 1, 2 * nearClip},
-                {0, 0, 1, 0}
+                {0, 0, -1, -2 * nearClip},
+                {0, 0, -1, 0}
         });
     }
 }
