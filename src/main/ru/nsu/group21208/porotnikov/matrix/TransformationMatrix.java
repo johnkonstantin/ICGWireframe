@@ -14,6 +14,11 @@ public class TransformationMatrix extends Matrix {
         }
     }
 
+    public static TransformationMatrix composeTransformation(TransformationMatrix tm1, TransformationMatrix tm2) {
+        Matrix res = Matrix.mul(tm2, tm1);
+        return new TransformationMatrix(res.getDoubleArray());
+    }
+
     public static @NotNull Vector3DHomo transform(TransformationMatrix matrix, Vector3DHomo vector) {
         double[][] res = Matrix.mul(matrix, vector).getDoubleArray();
         return new Vector3DHomo(res[0][0], res[1][0], res[2][0], res[3][0]);
