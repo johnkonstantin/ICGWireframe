@@ -33,7 +33,8 @@ public class Vector3D extends Matrix {
     }
 
     public static @NotNull Vector3D normalize(@NotNull Vector3D vector) {
-        return (Vector3D) Matrix.mulToNumber(vector, 1.0 / vector.getModule());
+        double[][] res = Matrix.mulToNumber(vector, 1.0 / vector.getModule()).getDoubleArray();
+        return new Vector3D(res[0][0], res[1][0], res[2][0]);
     }
 
     public static double dotProduct(@NotNull Vector3D vector1, @NotNull Vector3D vector2) {
