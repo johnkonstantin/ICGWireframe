@@ -9,7 +9,7 @@ import java.awt.event.*;
 
 public class Scene extends JPanel {
     private Curve                curve;
-    private int                  M    = 5;
+    private int                  M    = 5000;
     private int                  M1   = 1;
     private double               zn   = 2;
     private double               fovy = 10;
@@ -178,21 +178,21 @@ public class Scene extends JPanel {
             ((Graphics2D) g).setStroke(new BasicStroke(2));
             g.setColor(Color.BLUE);
             g.drawLine(
-                    (int) (cV.getX() - getWidth() / 2.5), (int) (cV.getY() - getHeight() / 2.5),
-                    (int) (xV.getX() - getWidth() / 2.5),
-                    (int) (xV.getY() - getHeight() / 2.5)
+                    (int) cV.getX(), (int) cV.getY(),
+                    (int) xV.getX(),
+                    (int) xV.getY()
                       );
             g.setColor(Color.GREEN);
             g.drawLine(
-                    (int) (cV.getX() - getWidth() / 2.5), (int) (cV.getY() - getHeight() / 2.5),
-                    (int) (yV.getX() - getWidth() / 2.5),
-                    (int) (yV.getY() - getHeight() / 2.5)
+                    (int) cV.getX(), (int) cV.getY(),
+                    (int) yV.getX(),
+                    (int) yV.getY()
                       );
             g.setColor(Color.RED);
             g.drawLine(
-                    (int) (cV.getX() - getWidth() / 2.5), (int) (cV.getY() - getHeight() / 2.5),
-                    (int) (zV.getX() - getWidth() / 2.5),
-                    (int) (zV.getY() - getHeight() / 2.5)
+                    (int) cV.getX(), (int) cV.getY(),
+                    (int) zV.getX(),
+                    (int) zV.getY()
                       );
 
 
@@ -208,12 +208,25 @@ public class Scene extends JPanel {
                 }
             }
 
+            minZ = Double.POSITIVE_INFINITY;
+            maxZ = Double.NEGATIVE_INFINITY;
+
+            for (Vector3DHomo[] line : curveVectors) {
+                for (Vector3DHomo vector : line) {
+                    minZ = Math.min(minZ, Vector3DHomo.toCartesian(vector).getZ());
+                    maxZ = Math.max(maxZ, Vector3DHomo.toCartesian(vector).getZ());
+                }
+            }
+
             g.setColor(Color.BLACK);
             for (int i = 0; i < curveVectors.length; ++i) {
                 for (int j = 0; j < curveVectors[0].length - 1; ++j) {
                     Vector3D vector1 = Vector3DHomo.toCartesian(curveVectors[i][j]);
                     Vector3D vector2 = Vector3DHomo.toCartesian(curveVectors[i][j + 1]);
-
+                    double z = (vector1.getZ() + vector2.getZ()) / 2;
+                    double normZ = (z - minZ) / (maxZ - minZ);
+                    int c = (int) (normZ * normZ * 255);
+                    g.setColor(new Color(c, c, 0));
                     g.drawLine((int) vector1.getX(), (int) vector1.getY(), (int) vector2.getX(), (int) vector2.getY());
                 }
             }
@@ -222,7 +235,10 @@ public class Scene extends JPanel {
                 for (int j = 0; j < circlesVectors[0].length - 1; ++j) {
                     Vector3D vector1 = Vector3DHomo.toCartesian(circlesVectors[i][j]);
                     Vector3D vector2 = Vector3DHomo.toCartesian(circlesVectors[i][j + 1]);
-
+                    double z = (vector1.getZ() + vector2.getZ()) / 2;
+                    double normZ = (z - minZ) / (maxZ - minZ);
+                    int c = (int) (normZ * normZ * 255);
+                    g.setColor(new Color(c, c, 0));
                     g.drawLine((int) vector1.getX(), (int) vector1.getY(), (int) vector2.getX(), (int) vector2.getY());
                 }
             }
@@ -241,7 +257,7 @@ public class Scene extends JPanel {
         });
 
         curve = new Curve(new Point[]{
-                new Point(-90, 10),
+                new Point(-30, 10),
                 new Point(0, 10),
                 new Point(30, 10),
                 new Point(60, 10)
