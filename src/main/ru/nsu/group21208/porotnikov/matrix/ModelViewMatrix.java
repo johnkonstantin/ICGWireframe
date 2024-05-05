@@ -3,7 +3,8 @@ package main.ru.nsu.group21208.porotnikov.matrix;
 import org.jetbrains.annotations.NotNull;
 
 public class ModelViewMatrix extends TransformationMatrix {
-    public ModelViewMatrix(@NotNull Vector3D modelCenter, double @NotNull [] scale, @NotNull Vector3D cameraPos,
+    public ModelViewMatrix(@NotNull Vector3D modelCenter, double @NotNull [] scale, @NotNull RotationMatrix modelRot,
+                           @NotNull Vector3D cameraPos,
                            @NotNull Vector3D cameraUp
                           ) {
         super();
@@ -24,6 +25,7 @@ public class ModelViewMatrix extends TransformationMatrix {
                 -modelCenter.getX(), -modelCenter.getY(), -modelCenter.getZ());
         ScaleMatrix          scaleMatrix = new ScaleMatrix(scale[0], scale[1], scale[2]);
         TransformationMatrix model       = TransformationMatrix.composeTransformation(transferMatrix, scaleMatrix);
+        model = TransformationMatrix.composeTransformation(model, modelRot);
 
         TransformationMatrix modelView = TransformationMatrix.composeTransformation(model, view);
         this.matrix = modelView.getDoubleArray();
