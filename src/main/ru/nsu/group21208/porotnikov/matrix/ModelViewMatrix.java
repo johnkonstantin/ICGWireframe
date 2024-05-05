@@ -3,7 +3,8 @@ package main.ru.nsu.group21208.porotnikov.matrix;
 import org.jetbrains.annotations.NotNull;
 
 public class ModelViewMatrix extends TransformationMatrix {
-    public ModelViewMatrix(@NotNull Vector3D modelCenter, double @NotNull [] scale, @NotNull RotationMatrix modelRot,
+    public ModelViewMatrix(@NotNull Vector3D modelCenter, double @NotNull [] scale,
+                           @NotNull TransformationMatrix modelRot,
                            @NotNull Vector3D cameraPos,
                            @NotNull Vector3D cameraUp
                           ) {
