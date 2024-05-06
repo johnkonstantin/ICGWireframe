@@ -2,7 +2,10 @@ package main.ru.nsu.group21208.porotnikov.matrix;
 
 import org.jetbrains.annotations.NotNull;
 
+
 public class TransformationMatrix extends Matrix {
+    private static final long serialVersionUID = 122222222222L;
+
     public TransformationMatrix() {
         super(4, 4);
     }

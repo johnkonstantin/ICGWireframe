@@ -3,10 +3,13 @@ package main.ru.nsu.group21208.porotnikov.matrix;
 
 import org.jetbrains.annotations.NotNull;
 
-public class Matrix {
-    protected double[][] matrix;
-    protected int        h;
-    protected int        w;
+import java.io.Serializable;
+
+public class Matrix implements Serializable {
+    private static final long       serialVersionUID = 155555555555555555L;
+    protected            double[][] matrix;
+    protected            int        h;
+    protected            int        w;
 
     public enum Orientation {
         Horizontal,

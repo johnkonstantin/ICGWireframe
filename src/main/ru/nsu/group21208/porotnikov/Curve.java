@@ -3,13 +3,15 @@ package main.ru.nsu.group21208.porotnikov;
 import main.ru.nsu.group21208.porotnikov.matrix.Matrix;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Curve {
-    private final Point[] basePoints;
-    private final int N;
-    private final Matrix Ms = new Matrix(new double[][]{
+public class Curve implements Serializable {
+    private static final long    serialVersionUID = 1444444444444444L;
+    private final        Point[] basePoints;
+    private final        int     N;
+    private final        Matrix  Ms               = new Matrix(new double[][]{
             {-1.0 / 6, 0.5, -0.5, 1.0 / 6},
             {0.5, -1.0, 0.5, 0},
             {-0.5, 0, 0.5, 0},
@@ -27,7 +29,7 @@ public class Curve {
             throw new RuntimeException("At least 1 segment!");
         }
         this.basePoints = basePoints;
-        this.N = N;
+        this.N          = N;
     }
 
     public Point[][] getCurvePoints() {

@@ -223,9 +223,9 @@ public class Scene extends JPanel {
                 for (int j = 0; j < curveVectors[0].length - 1; ++j) {
                     Vector3D vector1 = Vector3DHomo.toCartesian(curveVectors[i][j]);
                     Vector3D vector2 = Vector3DHomo.toCartesian(curveVectors[i][j + 1]);
-                    double z = (vector1.getZ() + vector2.getZ()) / 2;
-                    double normZ = (z - minZ) / (maxZ - minZ);
-                    int c = (int) (normZ * normZ * 255);
+                    double   z       = (vector1.getZ() + vector2.getZ()) / 2;
+                    double   normZ   = (z - minZ) / (maxZ - minZ);
+                    int      c       = (int) (normZ * normZ * 255);
                     g.setColor(new Color(c, c, 0));
                     g.drawLine((int) vector1.getX(), (int) vector1.getY(), (int) vector2.getX(), (int) vector2.getY());
                 }
@@ -235,8 +235,9 @@ public class Scene extends JPanel {
                 for (int j = 0; j < circlesVectors[0].length - 1; ++j) {
                     Vector3D vector1 = Vector3DHomo.toCartesian(circlesVectors[i][j]);
                     Vector3D vector2 = Vector3DHomo.toCartesian(circlesVectors[i][j + 1]);
-                    double z = (vector1.getZ() + vector2.getZ()) / 2;
-                    double normZ = (z - minZ) / (maxZ - minZ);
+                    double   z       = (vector1.getZ() + vector2.getZ()) / 2;
+                    double   normZ   = (z - minZ) / (maxZ - minZ);
+                    normZ = Math.min(1, Math.max(0, normZ));
                     int c = (int) (normZ * normZ * 255);
                     g.setColor(new Color(c, c, 0));
                     g.drawLine((int) vector1.getX(), (int) vector1.getY(), (int) vector2.getX(), (int) vector2.getY());
@@ -344,5 +345,28 @@ public class Scene extends JPanel {
         this.M1 = M1;
         repaint();
         return true;
+    }
+
+    public void resetRotations() {
+        rot = new RotationMatrix(0, RotationMatrix.RotationAxis.AxisX);
+        repaint();
+    }
+
+    public TransformationMatrix getRotations() {
+        return new TransformationMatrix(rot.getDoubleArray().clone());
+    }
+
+    public double getFOV() {
+        return fovy;
+    }
+
+    public void setFOV(double fov) {
+        this.fovy = fov;
+        repaint();
+    }
+
+    public void setRotation(TransformationMatrix rot) {
+        this.rot = rot;
+        repaint();
     }
 }

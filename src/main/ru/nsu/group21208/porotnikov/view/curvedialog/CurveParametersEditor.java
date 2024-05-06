@@ -1,6 +1,7 @@
 package main.ru.nsu.group21208.porotnikov.view.curvedialog;
 
 import main.ru.nsu.group21208.porotnikov.Curve;
+import main.ru.nsu.group21208.porotnikov.view.scene.Scene;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,19 +9,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class CurveParametersEditor extends JPanel {
-    private JSpinner  nEditor;
-    private JSpinner  basePointsEditor;
-    private JSpinner  mEditor;
-    private JSpinner  m1Editor;
-    private CurveView curveView;
+    private JSpinner    nEditor;
+    private JSpinner    basePointsEditor;
+    private JSpinner    mEditor;
+    private JSpinner    m1Editor;
+    private CurveView   curveView;
+    private Scene       scene;
+    private CurveDialog curveDialog;
 
-    public CurveParametersEditor(CurveView curveView) {
+    public CurveParametersEditor(CurveView curveView, CurveDialog curveDialog) {
         super();
         if (curveView == null) {
             throw new RuntimeException("CurveView parameter must be not null!");
         }
         this.curveView = curveView;
         this.curveView.setParametersEditor(this);
+        this.curveDialog = curveDialog;
         JLabel  nLabel          = new JLabel("N");
         JLabel  basePointsLabel = new JLabel("K");
         JLabel  mLabel          = new JLabel("M");
@@ -32,7 +36,7 @@ public class CurveParametersEditor extends JPanel {
         basePointsEditor = new JSpinner(new SpinnerNumberModel(curveView.getCurveBasePointsNum(), 4, 50, 1));
         basePointsEditor.addChangeListener(
                 e -> curveView.setCurveBasePointsNum((Integer) ((JSpinner) e.getSource()).getValue()));
-        mEditor  = new JSpinner(new SpinnerNumberModel(2, 2, 100, 1));
+        mEditor  = new JSpinner(new SpinnerNumberModel(3, 2, 100, 1));
         m1Editor = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
         add(nLabel);
         add(nEditor);
@@ -46,6 +50,28 @@ public class CurveParametersEditor extends JPanel {
         add(applyButton);
         JButton normButton = new JButton("Norm");
         add(normButton);
+
+        okButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (scene != null) {
+                    scene.setCurve(curveView.getCurve());
+                    scene.setM((Integer) mEditor.getValue());
+                    scene.setM1((Integer) m1Editor.getValue());
+                }
+                curveDialog.setVisible(false);
+            }
+        });
+        applyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (scene != null) {
+                    scene.setCurve(curveView.getCurve());
+                    scene.setM((Integer) mEditor.getValue());
+                    scene.setM1((Integer) m1Editor.getValue());
+                }
+            }
+        });
         normButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -67,12 +93,7 @@ public class CurveParametersEditor extends JPanel {
                 double centerY = (maxY + minY) / 2;
                 double k       = Math.max((maxX - minX) / curveView.getWidth(), (maxY - minY) / curveView.getHeight());
 
-                for (int i = 0; i < newBase.length; ++i) {
-                    newBase[i].x -= centerX;
-                    newBase[i].y -= centerY;
-                }
-
-                curveView.setCenter(new Point(0, 0));
+                curveView.setCenter(new Point((int) -centerX, (int) centerY));
                 curveView.setScale(0.9 / k);
                 curveView.setCurve(new Curve(newBase, curveView.getCurveN()));
             }
@@ -88,5 +109,31 @@ public class CurveParametersEditor extends JPanel {
         catch (IllegalArgumentException e) {
             return false;
         }
+    }
+
+    public void setM(int M) {
+        mEditor.setValue(M);
+        if (scene != null) {
+            scene.setM(M);
+        }
+    }
+
+    public void setM1(int M1) {
+        m1Editor.setValue(M1);
+        if (scene != null) {
+            scene.setM1(M1);
+        }
+    }
+
+    public int getM() {
+        return (Integer) mEditor.getValue();
+    }
+
+    public int getM1() {
+        return (Integer) m1Editor.getValue();
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
     }
 }
