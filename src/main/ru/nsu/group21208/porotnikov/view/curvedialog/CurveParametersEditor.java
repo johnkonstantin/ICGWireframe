@@ -73,7 +73,7 @@ public class CurveParametersEditor extends JPanel {
                 }
 
                 curveView.setCenter(new Point(0, 0));
-                curveView.setScale(k * 2);
+                curveView.setScale(0.9 / k);
                 curveView.setCurve(new Curve(newBase, curveView.getCurveN()));
             }
         });
